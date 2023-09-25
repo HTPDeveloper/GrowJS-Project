@@ -1,0 +1,23 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TankTypes = void 0;
+var TankTypes;
+(function (TankTypes) {
+    TankTypes[TankTypes["PEER_MOVE"] = 0] = "PEER_MOVE";
+    TankTypes[TankTypes["TILE_PUNCH"] = 3] = "TILE_PUNCH";
+    TankTypes[TankTypes["PEER_WORLD"] = 4] = "PEER_WORLD";
+    TankTypes[TankTypes["TILE_UPDATE"] = 5] = "TILE_UPDATE";
+    TankTypes[TankTypes["PEER_ENTER_DOOR"] = 7] = "PEER_ENTER_DOOR";
+    TankTypes[TankTypes["TILE_DAMAGE"] = 8] = "TILE_DAMAGE";
+    TankTypes[TankTypes["PEER_INVENTORY"] = 9] = "PEER_INVENTORY";
+    TankTypes[TankTypes["PEER_CLOTH"] = 10] = "PEER_CLOTH";
+    TankTypes[TankTypes["PEER_COLLECT"] = 11] = "PEER_COLLECT";
+    TankTypes[TankTypes["TILE_TREE"] = 12] = "TILE_TREE";
+    TankTypes[TankTypes["PEER_DROP"] = 14] = "PEER_DROP";
+    TankTypes[TankTypes["TILE_APPLY_LOCK"] = 15] = "TILE_APPLY_LOCK";
+    TankTypes[TankTypes["PEER_ITEMS_DAT"] = 16] = "PEER_ITEMS_DAT";
+    TankTypes[TankTypes["PEER_ICON"] = 18] = "PEER_ICON";
+    TankTypes[TankTypes["PEER_PING_RESPONSE"] = 21] = "PEER_PING_RESPONSE";
+    TankTypes[TankTypes["PEER_PING_REQUEST"] = 22] = "PEER_PING_REQUEST";
+    TankTypes[TankTypes["SET_CHARACTER_STATE"] = 23] = "SET_CHARACTER_STATE";
+})(TankTypes = exports.TankTypes || (exports.TankTypes = {}));
