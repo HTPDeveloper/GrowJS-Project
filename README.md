@@ -29,5 +29,5 @@ how_to_play#0
 # Want to contribute? Sure! 
 
 # Credits & How to setup
-[Credits](https://github.com/JadlionHD/GrowServer/tree/main#credits) \n
+[Credits](https://github.com/JadlionHD/GrowServer/tree/main#credits) | 
 [Original repo & Learn to setup](https://github.com/JadlionHD/GrowServer) 
