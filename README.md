@@ -1,0 +1,25 @@
+# GrowJS-Test
+For beta testers
+
+# Note
+- This is not the original or the updated src, it's just a sample.
+- Do not sell it(Dumb person will do it)
+
+# Features
+- Ringmaster
+- Gem drops
+- Telephone (Daily Quest)
+- /sb (Not fixed)
+- /help
+- /invis
+- /dq (Generate new dq)
+- /event (start world event)
+- /carnivalstart & /carnivalend (Start & End carnival anytime.
+
+# Found any bugs? Contact me on Discord
+how_to_play#0
+[Discord Server](https://discord.gg/ZqxeqhGZG8) 
+
+# Credits & How to setup
+[Credits](https://github.com/JadlionHD/GrowServer/tree/main#credits) 
+[Original repo & Learn to setup](https://github.com/JadlionHD/GrowServer) 
