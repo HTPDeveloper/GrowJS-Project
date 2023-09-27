@@ -17,7 +17,7 @@ For beta testers
 - /invis
 - /dq (Generate new dq)
 - /event (start world event)
-- /carnivalstart & /carnivalend (Start & End carnival anytime.
+- /carnivalstart & /carnivalend (Start & End carnival anytime.) 
 
 # To-do list 
 - Fixed all bugs. 
