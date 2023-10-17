@@ -1,5 +1,5 @@
 # GrowJS-Test
-For beta testers
+Growtopia private server made with nodejs! 
 
 # Note
 - This is not the original or the updated src, it's just a sample.
