@@ -9,7 +9,7 @@ Growtopia private server made with nodejs!
 - Added Surgery (Surg-e)
 - Added World Lock wrench
 - Added Guild (GUI and database only ~ todo)
-- Improve gem drops (No longer drops visual 1 gem, but collects more than 1)
+- Improve gem drops (No longer drops visual 1 gem, and collects more than 1)
 - Fixed /invis
 - Added Growtopia store (OUTDATED/Broken - Fetch from gt)
 - Added players profile like rgt
