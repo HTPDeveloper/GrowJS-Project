@@ -18,7 +18,7 @@ Growtopia private server made with nodejs!
 - Added chicken plow and harvester
 - Added Jammers (Todo)
 - Added roulette (Broken)
-- Listed many packets useful for your changes
+- Listed many packets useful for your changes.<br>
   **There's still more, join my server for future cool updates** - [GrowJS Project](https://discord.gg/G8uBgagYcf)
 
 # Features
