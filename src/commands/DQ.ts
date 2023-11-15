@@ -23,7 +23,7 @@ export default class extends Command {
       category: "Basic",
       usage: "/dq",
       example: ["/dq "],
-      permission: [Role.BASIC, Role.SUPPORTER, Role.DEVELOPER]
+      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
     };
   }
 
@@ -70,7 +70,19 @@ export default class extends Command {
       // Example: Generate a random number between 1 and 10 (inclusive)
       const randomNum4 = getRandomInt4(1, 150)
 
+      const dialog = new DialogBuilder()
+      
+      //.raw("\nadd_custom_button|tab_tasks|image:interface/large/btn_tabs1.rttex;image_size:228,92;frame:0,4;width:0.15;min_width:60;|\nend_custom_tabs|")
+      //.raw("\nadd_custom_button|tab_tasks1|image:interface/large/btn_tabs2.rttex;image_size:228,92;frame:0,4;width:0.15;min_width:60;|\nend_custom_tabs|")
+      //.addCustomBreak()
+      .defaultColor()
+      .addLabelWithIcon("Daily Quest Menu", 3902, "big")
+      .addSpacer("small")
+      .raw("\nadd_label|small| Breaking Blocks|left|")
+      .addSpacer("small")
+      .addInputBox("dq1", "Amount:", "", 6)
 
+      peer.send(Variant.from("OnDialogRequest", dialog.str()));
 
       peer.everyPeer((p) => {
        const dialog = new DialogBuilder()
@@ -83,7 +95,7 @@ export default class extends Command {
        .addQuickExit()
        .str()
 
-       p.send(Variant.from("OnDialogRequest", dialog));
+       //p.send(Variant.from("OnDialogRequest", dialog));
        p.send(Variant.from("OnConsoleMessage", "`2New Daily Quest for today`0, `9Check with Crazy Jim for items to deliver and get a reward of 1 Growtoken!"))
 
        data.set(`dqItem1`, randomNum)

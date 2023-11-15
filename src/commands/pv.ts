@@ -38,7 +38,8 @@ export default class extends Command {
 
     if(targetPeer.data.role === "1") p = "Developer"
     if(targetPeer.data.role === "2") p = "Basic"
-    if(targetPeer.data.role === "3") p = "Supporter"
+    if(targetPeer.data.role === "3") p = "Moderator"
+    if(targetPeer.data.role === "4") p = "Admin"
 
     let dialog = new DialogBuilder()
     .defaultColor()

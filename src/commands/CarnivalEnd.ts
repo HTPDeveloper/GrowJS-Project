@@ -23,7 +23,7 @@ export default class extends Command {
       category: "Basic",
       usage: "/endcarnival",
       example: ["/endcarnival"],
-      permission: [Role.BASIC, Role.SUPPORTER, Role.DEVELOPER]
+      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
     };
   }
 

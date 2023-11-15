@@ -139,7 +139,61 @@ export function HandleTile(
 
       return buf;
     }
+    case ActionTypes.ITEM_SUCKER: {
+      buf = Buffer.alloc(13);
 
+      buf.writeUInt32LE(block.fg! | (block.bg! << 16));
+      buf.writeUint16LE(0x0, 4);
+      buf.writeUint16LE(0x0, 6);
+
+      buf.writeUint8(ExtraTypes.MAGPLANT, 8);
+      buf.writeUint32LE(block.dblockID!, 9);
+
+      return buf;
+    }
+
+    case ActionTypes.VENDING_MACHINE: {
+      const fg = block.fg ?? 0;
+      const bg = block.bg ?? 0;
+      const dblockID = block.dblockID ?? 0;
+    
+      // Validate that fg, bg, and dblockID have valid values
+      if (typeof fg !== 'number' || typeof bg !== 'number' || typeof dblockID !== 'number') {
+        // Handle the error condition, such as throwing an error or returning a default value
+        throw new Error('Invalid values for fg, bg, or dblockID');
+      }
+    
+      const buf = Buffer.alloc(13);
+    
+      buf.writeUInt32LE(fg | (bg << 16));
+      buf.writeUInt16LE(0x0, 4);
+      buf.writeUInt16LE(0x0, 6);
+    
+      buf.writeUInt8(ExtraTypes.VENDING_MACHINE, 8);
+      buf.writeUInt32LE(dblockID, 9);
+    
+      console.log("buf:", buf);
+    }
+
+    case ActionTypes.LOCK: {
+      const parentBlockIndex = 123
+      buf = Buffer.alloc(12);
+
+      buf.writeUInt32LE(block.fg! | (block.bg! << 16));
+      buf.writeUint16LE(lockPos, 4);
+      buf.writeUint16LE(Flags.FLAGS_TILEEXTRA, 6);
+
+      buf.writeUint8(ExtraTypes.AREA_LOCK, 8);
+      buf.writeUint8(Lock ? 0x1 : 0x0, 9); // Set lock state
+
+      if (parentBlockIndex !== undefined) {
+        buf.writeUInt16LE(parentBlockIndex, 10); // Write parent block index
+      } else {
+        buf.writeUInt16LE(10, 10); // Write 0 if parent block index is not provided
+      }
+
+      return buf;
+    }
     default: {
       buf = Buffer.alloc(8);
 

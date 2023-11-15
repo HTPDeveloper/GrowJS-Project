@@ -6,6 +6,7 @@ import { DialogReturnType } from "../types/dialog";
 import { DialogBuilder } from "../utils/builders/DialogBuilder";
 import { parseAction } from "../utils/Utils";
 import { Database } from "../database/db";
+import { World } from "../structures/World";
 
 export default class extends Dialog {
   constructor() {
@@ -19,6 +20,7 @@ export default class extends Dialog {
     base: BaseServer,
     peer: Peer,
     db: Database,
+   // world: World, 
     action: DialogReturnType<{
       action: string;
       dialog_name: string;

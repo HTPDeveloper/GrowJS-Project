@@ -26,8 +26,17 @@ export function handleBlockPlacing(p: Arg): boolean {
     case ActionTypes.XENONITE:
     case ActionTypes.WEATHER_SPECIAL:
     case ActionTypes.CHECKPOINT:
+    case ActionTypes.BOOMBOX:
     case ActionTypes.FOREGROUND:
     case ActionTypes.DICE:
+    case ActionTypes.ICE:
+    case ActionTypes.VENDING_MACHINE:
+    case ActionTypes.PLATFORM:
+    case ActionTypes.AUTO_ACTION_HARVEST:
+    case ActionTypes.PROVIDER:
+    case ActionTypes.AUTO_ACTION_HARVEST_SUCK:
+    case ActionTypes.ITEM_SUCKER:
+    case ActionTypes.FOSSIL:
     case ActionTypes.SFX_WITH_EXTRA_FRAME:
     case ActionTypes.BACKGROUND: {
       p.world.place({
@@ -98,8 +107,13 @@ export function handleBlockPlacing(p: Arg): boolean {
     }
 
     case ActionTypes.LOCK: {
-      if (p.id !== 242) return false;
+      if (p.id !== 242 && p.id !== 202 && p.id !== 5814) return false;
 
+      
+      if(p.block.worldLock === true){ 
+     p.peer.send(Variant.from("OnTalkBubble", p.peer.data.netID, "You can only place 1 World Lock in a world!"));
+     return true
+      }else {
 
      const locked =  p.block.worldLock = true;
       if (!p.block.lock) {
@@ -123,17 +137,13 @@ export function handleBlockPlacing(p: Arg): boolean {
         id: p.id
       });
 
-      if(p.block.worldLock === true && locked){
-        p.peer.send(Variant.from("OnTalkBubble", p.peer.data.netID, "You can only place 1 World Lock in a world!"));
-        return true
-      }
-
 
       tileUpdate(p.base, p.peer, p.actionType, p.block, p.world);
 
       return true;
       break;
     }
+  }
 
     case ActionTypes.DISPLAY_BLOCK: {
       p.block.dblockID = 0;

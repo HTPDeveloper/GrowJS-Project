@@ -16,21 +16,29 @@ export default class extends Command {
   constructor() {
     super();
     this.opt = {
-      name: "startcarnival",
-      description: "Open Carnival.",
+      name: "gemeventend",
+      description: "NO gems!",
       cooldown: 0,
       ratelimit: 1,
-      category: "Basic",
-      usage: "/startcarnival",
-      example: ["/startcarnival"],
-      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
+      category: "Developer",
+      usage: "/gemeventend",
+      example: ["/gemeventend"],
+      permission: [Role.DEVELOPER]
     };
   }
 
   public async execute(base: BaseServer, peer: Peer, text: string, args: string[]): Promise<void> { 
+    const GemEvnt = await data.get(`GemEvent`)
+    const Gems = await data.get(`GemEventGems`)
+
+    //if(!args[0]) return peer.send(Variant.from("OnConsoleMessage", "Please enter a number!"))
+    //if(GemEvnt) return peer.send(Variant.from("OnConsoleMessage", "Event has already started! `bEnd the event to start a new one!"))
+
    peer.everyPeer((p) => {
-    p.send(Variant.from("OnConsoleMessage", "`2Carnival has come to town`0, visit the world `9CARNIVAL`0, try your luck at winning one of the ringmaster's fabulous rings!"))
-   data.set(`Carnival`, true)
+    p.send(Variant.from("OnConsoleMessage", `${Gems}x \`2Gem Event has ended!`))
+   // p.send(Variant.from("OnAddNotification", "interface/atomic_button.rttex" ,`${args[0]}x \`2Gem Event has began!\``, "audio/hub_open.wav"))
+   data.set(`GemEvent`, false)
+   data.set(`GemEventGems`, 1)
    })
   }
 }

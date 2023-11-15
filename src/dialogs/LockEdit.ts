@@ -14,7 +14,7 @@ export default class extends Dialog {
   constructor() {
     super();
     this.config = {
-      dialogName: "door_edit"
+      dialogName: "lock_edit"
     };
   }
 
@@ -22,31 +22,29 @@ export default class extends Dialog {
     base: BaseServer,
     peer: Peer,
     db: Database,
-   // world: World, 
     action: DialogReturnType<{
       action: string;
       dialog_name: string;
-      tilex: string;
-      tiley: string;
-      itemID: string;
-      label?: string;
-      target?: string;
-      id?: string;
+      playerNetID: number;
     }>
   ): void {
     const world = peer.hasWorld(peer.data.world);
-    const pos = parseInt(action.tilex) + parseInt(action.tiley) * world?.data.width!;
-    const block = world?.data.blocks![pos]!;
-    const itemMeta = base.items.metadata.items.find((i) => i.id === parseInt(action.itemID));
+    const newAdminsArray: number[] = [action.playerNetID];
 
-    if (world?.data.owner) {
-      if (world?.data.owner.id !== peer.data.id_user) return;
+    if (action.playerNetID) {
+      if (action.playerNetID === peer.data.netID) {
+        return peer.send(Variant.from("OnTalkBubble", "You already have access!"));
+      }
+
+      const data = world?.data;
+
+      // Assign the admins property to the variable
+      data!.admins = newAdminsArray;
+
+      //world?.saveToDatabase(); // Save the world to the database
+
+      // Send a chat message to notify the player
+      peer.send(Variant.from("OnConsoleMessage", "New admin added!"));
     }
-
-    block.door!.label = action.label || "";
-    block.door!.destination = action.target?.toUpperCase() || "";
-    block.door!.id = action.id?.toUpperCase() || "";
-
-    tileUpdate(base, peer, itemMeta?.type!, block, world!);
   }
 }

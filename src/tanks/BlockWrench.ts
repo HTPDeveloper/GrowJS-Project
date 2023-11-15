@@ -91,6 +91,104 @@ export async function handleWrench(base: BaseServer, tank: TankPacket, peer: Pee
 
        
     }
+
+    case ActionTypes.VENDING_MACHINE:{
+      if(world.data.owner) {
+        if (world.data.owner.id !== peer.data.id_user) return;
+      }
+    
+      const dialog = new DialogBuilder()
+      .defaultColor()
+      .addLabelWithIcon(`${itemMeta.name}`, itemMeta.id!, "big")
+      .addSmallText("This machine is empty.")
+      .addButton("putItem", "Put an item in")
+      .endDialog("vend", "Close", "Update")
+      .str()
+
+      peer.send(Variant.from({ delay: 100 }, "OnDialogRequest", dialog));
+    }
+
+    case ActionTypes.LOCK: {
+      if(world.data.owner) {
+        if (world.data.owner.id !== peer.data.id_user) return;
+      }
+
+      // Assuming world.data.admins is an array of numbers
+      const adminsArray = world.data?.admins;
+
+      
+
+      const resultArray = adminsArray?.length ? adminsArray : ["none"];
+      
+      //console.log(resultArray);
+
+// Check if adminsArray is defined before accessing its elements
+class World {
+  static async getData(): Promise<any> {
+    try {
+      // Fetch and return data
+      const data = await fetchData(); // Replace with your actual data retrieval logic
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+world.getData()
+.then((data) => {
+  console.log("Resolved Data:", data);
+})
+.catch((error) => {
+  console.error("Error:", error);
+});
+
+      let dialog = new DialogBuilder()
+      .defaultColor()
+      .addLabelWithIcon(`Edit ${itemMeta.name}`, itemMeta.id!, "big")
+      .addSmallText("Access list:")
+      if(JSON.stringify(resultArray) !== JSON.stringify(["none"])){ 
+        dialog.addCheckbox("admins", `${resultArray}`, "selected")
+      }
+      dialog.addSpacer("small")
+      .raw("add_player_picker|playerNetID|`wAdd``\n")
+      .addCheckbox("public_build", "Allow anyone to build", "not_selected")
+      .addCheckbox("dis_music_block", "Disable custom music blocks", "not_selected")
+      .addCheckbox("invis_music", "Make custom music blocks invisible", "not_selected")
+      .addSpacer("small")
+      .addButton("category", "Category: None")
+      .addButton("key", "`9Get World Key")
+      .addInputBox("bpm", "BPM", world.data.bpm, 3)
+      .addQuickExit()
+      .endDialog("world_lock", "Continue", "OK")
+      .str();
+  
+    peer.send(Variant.from({ delay: 100 }, "OnDialogRequest", dialog.str()));
+
+      
+      if(itemMeta.id === 5814){
+        let dialog = new DialogBuilder()
+        .defaultColor()
+        .addLabelWithIcon(`Edit ${itemMeta.name}`, itemMeta.id!, "big")
+        .addSmallText("Access list:")
+        if(JSON.stringify(resultArray) !== JSON.stringify(["none"])){ 
+          dialog.addCheckbox("admins", `${resultArray}`, "selected")
+        }
+      dialog.addSpacer("small")
+      .raw("add_player_picker|playerNetID|`wAdd``\n")
+      .addCheckbox("public_build", "Allow anyone to build", "not_selected")
+      .addCheckbox("dis_music_block", "Disable custom music blocks", "not_selected")
+      .addCheckbox("invis_music", "Make custom music blocks invisible", "not_selected")
+      .addSpacer("small")
+      .addButton("category", "Category: None")
+      .addButton("key", "`9Get World Key")
+      .addInputBox("bpm", "BPM", world.data.bpm, 3)
+      .addQuickExit()
+      .endDialog("world_lock", "Continue", "OK")
+      .str();
+  
+    peer.send(Variant.from({ delay: 100 }, "OnDialogRequest", dialog.str()));
+      }
+    }
   }
   const carnival = await data.get(`Carnival`)
   const OnQuest = await data.get(`OnQuest_${peer.data.id_user}`)
@@ -168,4 +266,26 @@ if(itemMeta.id === 3898){
 
   peer.send(Variant.from("OnDialogRequest", dialog));
 }
+
+if(itemMeta.id === 4296){
+  const Dialog = new DialogBuilder()
+  .defaultColor()
+  .addLabelWithIcon(`\`9${itemMeta.name} Surg-E Anatomical Dummy`, itemMeta.id!, "big")
+  .addSmallText(`Surgeon Skill: 100`)
+  .addLabel("Are you sure you want to perform surgery on this robot? Whether you succeed or fail, the robot will be destroyed in the process.")
+  .endDialog("surgery", "Cancel", "Okay!")
+
+  peer.send(Variant.from("OnDialogRequest", Dialog.str()));
 }
+
+
+}
+
+function fetchSomeData() {
+  throw new Error("Function not implemented.");
+}
+
+function fetchData() {
+  throw new Error("Function not implemented.");
+}
+

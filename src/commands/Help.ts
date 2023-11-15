@@ -19,7 +19,7 @@ export default class extends Command {
       category: "Basic",
       usage: "/help <command_name?>",
       example: ["/help", "/help ping"],
-      permission: [Role.BASIC, Role.SUPPORTER, Role.DEVELOPER]
+      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
     };
   }
 
@@ -30,18 +30,19 @@ export default class extends Command {
       let cmd = base.commands.get(args[0]);
 
       let dialog = new DialogBuilder()
-        .defaultColor()
-        .addLabelWithIcon(cmd?.opt.name!, "32", "small")
-        .addSpacer("small")
-        .addSmallText(`Description: ${cmd?.opt.description}`)
-        .addSmallText(`Cooldown: ${cmd?.opt.cooldown}`)
-        .addSmallText(`Ratelimit: ${cmd?.opt.ratelimit}`)
-        .addSmallText(`Permissions: ${cmd?.opt.permission.length ? cmd.opt.permission : "None"}`)
-        .addSmallText(`Usage: ${cmd?.opt.usage}`)
-        .addSmallText(`Example: ${cmd?.opt.example.join(", ")}`)
-        .endDialog("help_end", "", "Ok")
-        .addQuickExit();
-      return peer.send(Variant.from("OnDialogRequest", dialog.str()));
+      .defaultColor()
+      .addLabelWithIcon(cmd?.opt.name!, "32", "small")
+      .addSpacer("small")
+      .addSmallText(`Description: ${cmd?.opt.description}`)
+      .addSmallText(`Cooldown: ${cmd?.opt.cooldown}`)
+      .addSmallText(`Ratelimit: ${cmd?.opt.ratelimit}`)
+      .addSmallText(`Permissions: ${cmd?.opt.permission.length ? cmd.opt.permission : "None"}`)
+      .addSmallText(`Usage: ${cmd?.opt.usage}`)
+      .addSmallText(`Example: ${cmd?.opt.example.join(", ")}`)
+      .endDialog("help_end", "", "Ok")
+      .addQuickExit();
+    return peer.send(Variant.from("OnDialogRequest", dialog.str()));
+    
     }
 
     let dialog = new DialogBuilder()

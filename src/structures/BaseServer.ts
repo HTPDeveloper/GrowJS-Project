@@ -33,8 +33,8 @@ export class BaseServer {
   constructor() {
     this.server = new Client({ https: { enable: false } });
     this.items = {
-      hash: `${hashItemsDat(fs.readFileSync("./assets/dat/items.dat"))}`,
-      content: fs.readFileSync("./assets/dat/items.dat"),
+      hash: `${hashItemsDat(fs.readFileSync("./assets/dat/items.dat"))}`, // ./assets/dat/items.dat
+      content: fs.readFileSync("./assets/dat/items.dat"), // ./assets/dat/items.dat
       metadata: {} as ItemsDatMeta
     };
     this.action = new Map();
@@ -71,7 +71,7 @@ export class BaseServer {
   }
 
   async #_loadItems() {
-    let items = await new ItemsDat(fs.readFileSync("./assets/dat/items.dat")).decode();
+    let items = await new ItemsDat(fs.readFileSync("./assets/dat/items.dat")).decode(); // ./assets/dat/items.dat
 
     // 1181890091
     // let tes = items.items.find((v) => v.id === 10000)!;

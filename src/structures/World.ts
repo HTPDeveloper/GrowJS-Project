@@ -2,7 +2,7 @@
 
 import { TankPacket, TextPacket, Variant } from "growtopia.js";
 import { PeerDataType } from "../types/peer";
-import { Flags } from "../utils/enums/Tiles";
+import { ActionTypes, Flags } from "../utils/enums/Tiles";
 import { Block, EnterArg, Place, WorldData } from "../types/world";
 import { BaseServer } from "./BaseServer";
 import { WORLD_SIZE, Y_END_DIRT, Y_LAVA_START, Y_START_DIRT } from "../utils/Constants";
@@ -12,9 +12,14 @@ import { Peer } from "./Peer";
 import { DataTypes } from "../utils/enums/DataTypes";
 import { QuickDB } from "quick.db";
 import { tileUpdate } from "../tanks/BlockPlacing";
+import { buffer } from "stream/consumers";
 const data = new QuickDB
 
 export class World {
+  [x: string]: any;
+  handlePunch(arg0: { data: { xPunch: number; yPunch: number; }; }, peer: Peer, base: BaseServer, world: World) {
+    throw new Error("Method not implemented.");
+  }
   public data: WorldData = {};
   public worldName;
 
@@ -44,7 +49,8 @@ export class World {
         height: wrld.data.height!,
         blocks: Buffer.from(JSON.stringify(wrld.data.blocks)),
         owner: wrld.data.owner ? Buffer.from(JSON.stringify(wrld.data.owner)) : null,
-        dropped: Buffer.from(JSON.stringify(wrld.data.dropped))
+        dropped: Buffer.from(JSON.stringify(wrld.data.dropped)),
+        //admins: []
       });
     } else {
       await this.base.database.saveWorld({
@@ -55,7 +61,8 @@ export class World {
         height: wrld?.data.height!,
         blocks: Buffer.from(JSON.stringify(wrld?.data.blocks!)),
         owner: wrld.data.owner ? Buffer.from(JSON.stringify(wrld?.data.owner!)) : null,
-        dropped: Buffer.from(JSON.stringify(wrld.data.dropped))
+        dropped: Buffer.from(JSON.stringify(wrld.data.dropped)),
+      //  admins: []
       });
     }
   }
@@ -124,8 +131,9 @@ export class World {
 
     if (sendMenu)
       peer.send(
-        Variant.from({ delay: 500 }, "OnRequestWorldSelectMenu"),
+        Variant.from({ delay: 500 }, "OnRequestWorldSelectMenu", "add_filter|\nadd_heading|Top Worlds|\nadd_floater|wotd_world|START|0|0.5|2147418367|"),
         Variant.from({ delay: 500 }, "OnConsoleMessage", `Where do you want to go?`)
+
       );
 
     peer.data.world = "EXIT";
@@ -137,6 +145,8 @@ export class World {
       // TODO: delete the cache (if needed) & save it to db
     }
   }
+
+  
 
   public async getData() {
     if (!this.base.cache.worlds.has(this.worldName)) {
@@ -282,6 +292,17 @@ export class World {
       );
     }
 
+    if(this.worldName === "GROWGANOTH"){
+      peer.everyPeer((p)=> {
+        peer.send(Variant.from("OnSetCurrentWeather", 9))
+        p.send(Variant.from("OnTalkBubble", peer.data.netID, "`2Growganoth is active!`0, Try to drop items and get rare items."))
+
+        
+
+      })
+     // peer.send(Variant.from("OnSetCurrentWeather", 9)) // 6 harvest
+    }
+
     const haveXeno = await data.get(`haveXeno_${peer.data.world}`)
     const onEvent = await data.get(`onEvent_${peer.data.world}`)
     const carnival = await data.get(`Carnival`)
@@ -303,7 +324,7 @@ export class World {
     const randomNum = getRandomInt(500, 1000);
 
     // 100, 60
-    if(onEvent){
+   if(onEvent){
       setTimeout(() => {
         peer.everyPeer((p) => {
           if(p.data.world === p.data.world){
@@ -329,8 +350,10 @@ setTimeout(() => {
         //console.log(`[Event] World Lock [Dropped] in ${p.data.world} | x: ${randomNum} y; ${randomNum}`)
        // p.send(Variant.from("OnAddNotification", 50, "`9World Locks `0spawns! `4You have 10 minutes to find it."))
          data.set(`onEvent_${p.data.world}`, false)   */                
-    //  })
+    //  })*/
     }
+
+    
 
     
 
@@ -491,6 +514,78 @@ setTimeout(() => {
     if (cache) this.saveToCache();
   }
 
+  public clearWorld(cache?: boolean) {
+    if (!this.worldName) throw new Error("World name required.");
+    const width = WORLD_SIZE.WIDTH;
+    const height = WORLD_SIZE.HEIGHT;
+    const blockCount = 0;
+
+    const data: WorldData = {
+      name: this.worldName,
+      width,
+      height,
+      blockCount,
+      blocks: [],
+      admins: [], // separate to different table
+      playerCount: 0,
+      jammers: [], // separate to different table
+      dropped: {
+        // separate (maybe?) to different table
+        uid: 0,
+        items: []
+      }
+    };
+
+    // starting points
+    let x = 0;
+    let y = 0;
+    // main door location
+    const mainDoorPosition = Math.floor(Math.random() * width);
+
+    for (let i = 0; i < blockCount; i++) {
+      // increase y axis, reset back to 0
+      if (x >= width) {
+        y++;
+        x = 0;
+      }
+
+      const block: Block = { x, y };
+      block.fg = 0;
+      block.bg = 0;
+
+      if (block.y === Y_START_DIRT - 1 && block.x === mainDoorPosition) {
+        block.fg = 6;
+        block.door = {
+          label: "EXIT",
+          destination: "EXIT"
+        };
+      } else if (block.y! >= Y_START_DIRT) {
+        block.fg =
+          block.x === mainDoorPosition && block.y === Y_START_DIRT
+            ? 8
+            : block.y! < Y_END_DIRT
+            ? block.y! >= Y_LAVA_START
+              ? Math.random() > 0.2
+                ? Math.random() > 0.1
+                  ? 2
+                  : 10
+                : 4
+              : Math.random() > 0.01
+              ? 2
+              : 10
+            : 8;
+        block.bg = 14;
+      }
+
+      data.blocks!.push(block);
+
+      x++;
+    }
+    this.data = data;
+    if (cache) this.saveToCache();
+  }
+
+
   public drop(
     peer: Peer,
     x: number,
@@ -558,6 +653,94 @@ setTimeout(() => {
 
     this.saveToCache();
   }
+
+ public dropGems(
+    peer: Peer,
+    x: number,
+    y: number,
+    id: number,
+    amount: number,
+    { tree, noSimilar }: any = {}
+  ) {
+    const tank = TankPacket.from({
+      type: TankTypes.PEER_DROP,
+      netID: -1,
+      targetNetID: tree ? -1 : peer.data.netID,
+      state: 0,
+      info: id,
+      xPos: x,
+      yPos: y,
+    
+    });
+  
+    const position = Math.trunc(x / 32) + Math.trunc(y / 32) * this.data.width!;
+    const block = this.data.blocks![position];
+  
+    const similarDrops = noSimilar
+      ? null
+      : this.data.dropped?.items
+          .filter((i) => i.id === id && block.x === i.block.x && block.y === i.block.y)
+          .sort((a, b) => a.amount - b.amount);
+  
+    const similarDrop = Array.isArray(similarDrops) ? similarDrops[0] : null;
+  
+    if (similarDrop && similarDrop.amount < 200) {
+      if (similarDrop.amount + amount > 200) {
+        const extra = similarDrop.amount + amount - 200;
+  
+        amount = 0;
+        similarDrop.amount = 200;
+  
+        this.dropGems(peer, x, y, id, extra, { tree: true });
+      }
+  
+      tank.data!.netID = -3;
+      tank.data!.targetNetID = similarDrop.uid;
+  
+      tank.data!.xPos = similarDrop.x;
+      tank.data!.yPos = similarDrop.y;
+  
+      amount += similarDrop.amount;
+  
+      similarDrop.amount = amount;
+    } else {
+      const gemQuantities = [100, 50, 10, 5, 1];
+  
+      for (const quantity of gemQuantities) {
+        while (amount >= quantity) {
+          const gemAmountToDrop = quantity;
+  
+          if (amount >= gemAmountToDrop) {
+            this.data.dropped?.items.push({
+              id,
+              amount: gemAmountToDrop,
+              x,
+              y,
+              uid: ++this.data.dropped.uid,
+              block: { x: block.x!, y: block.y! },
+            });
+  
+            const buffer = tank.parse();
+            buffer.writeFloatLE(gemAmountToDrop, 20);
+  
+            peer.everyPeer(
+              (p) => p.data.world === peer.data.world && p.data.world !== "EXIT" && p.send(buffer)
+            );
+  
+            amount -= gemAmountToDrop;
+          }
+        }
+      }
+    }
+  
+    this.saveToCache();
+  }
+ 
+  
+  
+  
+  
+  
 
   public collect(peer: Peer, uid: number) {
     const droppedItem = this.data.dropped?.items.find((i) => i.uid === uid);

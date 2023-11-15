@@ -4,6 +4,7 @@ export interface InventoryItems {
 }
 
 export interface PeerDataType {
+  [x: string]: number;
   x?: number;
   y?: number;
   world: string;

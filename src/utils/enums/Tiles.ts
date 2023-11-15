@@ -32,6 +32,7 @@ export enum ItemCollisionType {
   ITEMCOLLISION_FRIEND_ENTRANCE
 }
 
+
 export enum ActionTypes {
   FIST = 0,
   WRENCH = 1,
@@ -171,13 +172,15 @@ export enum ActionTypes {
   UNK3 = 138,
   FEEDING_BLOCK = 140,
   KRANKENS_BLOCK = 141,
-  FRIENDS_ENTRANCE = 142
+  FRIENDS_ENTRANCE = 142,
+  COLLECT
 }
 
 export const Options = {
   MUSIC_BLOCKS_DISABLED: 0x10,
   MUSIC_BLOCKS_INVIS: 0x20
 };
+
 
 export enum ExtraTypes {
   NONE,
@@ -239,5 +242,6 @@ export enum ExtraTypes {
   GAIA_HEART = 0x46,
   TECHNO_ORGANIC_ENGINE = 0x47,
   KRANKEN_GALACTIC = 0x50,
-  WEATHER_INFINITY = 0x4d
+  WEATHER_INFINITY = 0x4d,
+  AREA_LOCK
 }

@@ -5,6 +5,7 @@ import { WorldData, WorldDB } from "../types/world";
 import { encrypt } from "../utils/Utils";
 
 export class Database {
+
   public knex;
 
   constructor() {
@@ -30,6 +31,20 @@ export class Database {
     else return undefined;
   }
 
+  public async userSetDecay(username: string, date: string) {
+    let res = await this.knex.select("*").from<User>("users").where({ name: username }).insert({ date: date });
+
+    if (res.length) return res[0];
+    else return undefined;
+  }
+
+  public async updateRole(peer: string, role: string) {
+    let res = await this.knex.select("*").from<User>("users").where({ name: peer }).update({ role: role }) as string;
+
+    if (res.length) return res[0];
+    else return undefined;
+  }
+
   public async saveUser(data: PeerDataType) {
     if (!data.id_user) return;
 
@@ -48,10 +63,35 @@ export class Database {
     else return undefined;
   }
 
+  public async guildCreate(guildName: string, guildLeader: string, guildLevel: number, guildMembers: boolean) {
+    let res = await this.knex("guilds").insert({ name: guildName, leader: guildLeader, level: guildLevel, members: guildMembers });
+
+    if (res.length) return res[0];
+    else return undefined;
+    
+  }
+
+  public async guildUpdate(guildName: string, guildLeader: string, guildLevel: number, guildMembers: string[]) {
+    let res = await this.knex("guilds").where({ name: guildName }).update({ leader: guildLeader, level: guildLevel, members: guildMembers });
+    
+    
+  }
+
+  public async guildDelete(guildName: string) {
+    
+  }
+
+  public async getGuild(guildMembers: boolean, guildLeader: string) {
+    let res = await this.knex.select("*").from("guilds").where({ members: guildMembers, leader: guildLeader });
+
+    if (res.length) return res[0];
+    else return undefined;
+  }
+
   public async createUser(username: string, password: string) {
     const encPass = encrypt(password);
 
-    let res = await this.knex("users").insert({ name: username, password: encPass, role: "1" });
+    let res = await this.knex("users").insert({ name: username, password: encPass, role: "2" });
 
     if (res.length) return res[0];
     else return undefined;

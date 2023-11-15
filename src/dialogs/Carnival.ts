@@ -7,6 +7,7 @@ import { DialogBuilder } from "../utils/builders/DialogBuilder";
 import { Database } from "../database/db";
 import { WorldData, WorldDB } from "../types/world";
 import { QuickDB } from "quick.db";
+import { World } from "../structures/World";
 const data = new QuickDB
 
 export default class extends Dialog {
@@ -21,6 +22,7 @@ export default class extends Dialog {
     base: BaseServer,
     peer: Peer,
     db: Database,
+   // world: World, 
     action: DialogReturnType<{
       action: string;
       dialog_name: string;

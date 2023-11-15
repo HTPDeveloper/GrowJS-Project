@@ -24,6 +24,9 @@ export default class extends Action {
     const item = base.items.metadata.items.find((v) => v.id === itemID);
 
     const peerItem = peer.data.inventory?.items.find((v) => v.id === itemID);
+
+    if(peerItem?.id === 32 || peerItem?.id === 18) return peer.send(Variant.from("OnTextOverlay", "Cannot drop this item."))
+
     let dialog = new DialogBuilder()
       .defaultColor()
       .addLabelWithIcon(`Drop ${item?.name}`, item?.id!, "big")

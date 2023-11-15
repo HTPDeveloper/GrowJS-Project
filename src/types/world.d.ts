@@ -18,6 +18,7 @@ export interface WorldDB {
   height: number;
   owner?: Buffer | null;
   dropped?: Buffer;
+  //admins: number[];
 }
 
 export interface Jammer {

@@ -14,7 +14,7 @@ export default class extends Dialog {
   constructor() {
     super();
     this.config = {
-      dialogName: "door_edit"
+      dialogName: "FriendsDialog"
     };
   }
 
@@ -22,31 +22,30 @@ export default class extends Dialog {
     base: BaseServer,
     peer: Peer,
     db: Database,
-   // world: World, 
     action: DialogReturnType<{
       action: string;
       dialog_name: string;
-      tilex: string;
-      tiley: string;
-      itemID: string;
-      label?: string;
-      target?: string;
-      id?: string;
+      buttonClicked: string;
     }>
   ): void {
-    const world = peer.hasWorld(peer.data.world);
-    const pos = parseInt(action.tilex) + parseInt(action.tiley) * world?.data.width!;
-    const block = world?.data.blocks![pos]!;
-    const itemMeta = base.items.metadata.items.find((i) => i.id === parseInt(action.itemID));
+    if(action.buttonClicked === "CG"){ 
+   const dialog1 = new DialogBuilder()
+   .defaultColor()
+   .addLabelWithIcon("GrowAsia Guild Creation", 5814, "big")
+   .addSmallText("[`4BETA``] To create guild, fill all the empty fields.")
+   .addSmallText("`4Disclaimer``: Guild creation is currently in beta.")
+   .addSmallText("`4Inappropriate guild creation will result in a ban.")
+   .addSpacer("small")
+   .addInputBox("guild_name", "Guild Name:", "", 10)
+   .addSpacer("small")
+   .addInputBox("guild_statement", "Guild Statement:", "", 30)
+   .addSpacer("small")
+   .addButton("create", "Create!")
+   .endDialog("CGDialog", "", "Close")
+   .addQuickExit()
+   //.str();
 
-    if (world?.data.owner) {
-      if (world?.data.owner.id !== peer.data.id_user) return;
-    }
-
-    block.door!.label = action.label || "";
-    block.door!.destination = action.target?.toUpperCase() || "";
-    block.door!.id = action.id?.toUpperCase() || "";
-
-    tileUpdate(base, peer, itemMeta?.type!, block, world!);
+   peer.send(Variant.from("OnDialogRequest", dialog1.str()));
   }
+}
 }

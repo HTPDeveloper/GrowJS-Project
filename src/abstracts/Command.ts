@@ -1,3 +1,4 @@
+import { Database } from "../database/db";
 import { BaseServer } from "../structures/BaseServer";
 import { Peer } from "../structures/Peer";
 import { World } from "../structures/World";
@@ -19,5 +20,5 @@ export abstract class Command {
     };
   }
 
-  public async execute(base: BaseServer, peer: Peer, text: string, args: string[]): Promise<void> {}
+  public async execute(base: BaseServer, peer: Peer, text: string, args: string[], db: Database): Promise<void> {}
 }

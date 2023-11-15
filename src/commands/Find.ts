@@ -20,7 +20,7 @@ export default class extends Command {
       category: "Basic",
       usage: "/find",
       example: ["/find"],
-      permission: [Role.BASIC, Role.SUPPORTER, Role.DEVELOPER]
+      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
     };
   }
 
@@ -28,12 +28,18 @@ export default class extends Command {
     let dialog = new DialogBuilder()
       .defaultColor()
       .addLabelWithIcon("Find the item", "6016", "big")
-      .addCheckbox("seed_only", "Only seed", "not_selected")
-      .addInputBox("find_item_name", "", "", 30)
-      .addQuickExit()
+      if(peer.data.role === Role.DEVELOPER){ 
+      dialog.addCheckbox("seed_only", "Only seed", "not_selected")
+      }
+      dialog.addInputBox("find_item_name", "", "", 30)
+      
+      
+      dialog.addQuickExit()
       .endDialog("find_item", "Cancel", "Find")
       .str();
 
-    peer.send(Variant.from("OnDialogRequest", dialog));
+    peer.send(Variant.from("OnDialogRequest", dialog.str()));
   }
 }
+
+

@@ -73,7 +73,7 @@ export default class extends Action {
         if (
           base.commands.get(commandName)?.opt.permission.some((perm) => perm === peer.data.role)
         ) {
-          await base.commands.get(commandName)?.execute(base, peer, text, args);
+          await base.commands.get(commandName)?.execute(base, peer, text, args, db);
         } else {
           peer.send(
             Variant.from("OnConsoleMessage", `You dont have permission to use this command.`)

@@ -1,4 +1,4 @@
-import { Peer as OldPeer, TankPacket, TextPacket, Variant } from "growtopia.js";
+import { Peer as OldPeer, Sendable, TankPacket, TextPacket, Variant } from "growtopia.js";
 import { PeerDataType } from "../types/peer";
 import { Role, WORLD_SIZE } from "../utils/Constants";
 import { DataTypes } from "../utils/enums/DataTypes";
@@ -6,6 +6,8 @@ import { TankTypes } from "../utils/enums/TankTypes";
 import { BaseServer } from "./BaseServer";
 import { World } from "./World";
 import { ItemCollisionType } from "../utils/enums/Tiles";
+import { getPunchId } from "../tanks/Test";
+
 
 export class Peer extends OldPeer<PeerDataType> {
   public base;
@@ -15,6 +17,35 @@ export class Peer extends OldPeer<PeerDataType> {
 
     this.base = base;
   }
+
+  
+  public setTankValues(): void {
+
+    let tank = TankPacket.from({
+      type: 0x14, // CHARACTER_STATE
+      netID: this.data.netID,
+      info: 0, // CHARACTER_STATE flags
+      xPos: 1200,
+      yPos: 100,
+      xSpeed: 300,
+      ySpeed: 600,
+      xPunch: 0,
+      yPunch: 0,
+      state: 0
+    }).parse();
+  
+    tank.writeUint8(18 || 0x0, 5);
+    tank.writeUint8(0x80, 6); // extra punch
+    tank.writeUint8(0x80, 7); // extra place
+    tank.writeFloatLE(125.0, 20); // water walk speed
+  
+    // Use the updated tank object here
+    
+    this.send(tank);
+    
+}
+
+
 
   public sendClothes() {
     this.send(
@@ -29,7 +60,7 @@ export class Peer extends OldPeer<PeerDataType> {
         0x8295c3ff,
         [this.data.clothing?.ances!, 0.0, 0.0]
       )
-    );
+    )
 
     this.everyPeer((p) => {
       if (
@@ -53,6 +84,9 @@ export class Peer extends OldPeer<PeerDataType> {
       }
     });
   }
+
+
+  
 
   /** Extended version of setDataToCache */
   public saveToCache() {
@@ -86,14 +120,20 @@ export class Peer extends OldPeer<PeerDataType> {
       default: {
         return `\`w${this.data.tankIDName}\`\``;
       }
-      case Role.SUPPORTER: {
-        return `\`e${this.data.tankIDName}\`\``;
+      case Role.ADMIN: {
+        return `\`9@${this.data.tankIDName}\`\``;
       }
       case Role.DEVELOPER: {
-        return `\`b@${this.data.tankIDName}\`\``;
+        return `\`6@${this.data.tankIDName}\`\``;
+      }
+      case Role.MOD: {
+        return `\`#@${this.data.tankIDName}\`\``;
       }
     }
   }
+
+  
+
 
   public everyPeer(callbackfn: (peer: Peer, netID: number) => void): void {
     this.base.cache.users.forEach((p, k) => {
@@ -174,6 +214,8 @@ export class Peer extends OldPeer<PeerDataType> {
     // this.inventory();
     this.saveToCache();
   }
+  
+
 
   public inventory() {
     const inventory = this.data.inventory!;

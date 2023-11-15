@@ -10,5 +10,7 @@ export const Y_END_DIRT = 55;
 export const Role = {
   DEVELOPER: "1",
   BASIC: "2",
-  SUPPORTER: "3"
+  MOD: "3",
+  ADMIN: "4"
+
 };

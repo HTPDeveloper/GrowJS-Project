@@ -12,17 +12,24 @@ import { handlePunch } from "../tanks/Punch";
 import { ClothTypes } from "../utils/enums/ItemTypes";
 import { handleWrench } from "../tanks/BlockWrench";
 import { World } from "../structures/World";
+import { DialogBuilder } from "../utils/builders/DialogBuilder";
 import { WorldData } from "../types/world";
 import { Database } from "../database/db";
+import { QuickDB } from "quick.db";
+import { Role } from "../utils/Constants";
+const db = new QuickDB
+import * as fs from 'fs';
+import { tileUpdate } from "../tanks/BlockPlacing";
 
-export default class extends Listener<"raw"> {
+ export default class extends Listener<"raw"> {
   constructor() {
     super();
     this.name = "raw";
   }
 
+
   private failGuest(peer: Peer) {
-    peer.send(
+    /*peer.send(
       Variant.from(
         "OnConsoleMessage",
         "`4Unable to logon:`` Seems like you're on a guest account. Please register an account first from our website."
@@ -34,7 +41,26 @@ export default class extends Listener<"raw"> {
         "label|`$Create `9new`` Account``"
       )
     );
-    peer.disconnect();
+    Variant.from("")
+    peer.disconnect();*/
+    
+
+    let dialog = new DialogBuilder()
+    .defaultColor()
+    .addLabelWithIcon("GrowJS Account Registration", "242", "big")
+    .addSmallText("`5Welcome to GrowJS, to enter the game please register an account.")
+    .addInputBox("register_name", "GrowID:", "", 10)
+    .addSpacer("small")
+    .addInputBox("register_password", "Password:", "", 30)
+    .addSpacer("small")
+    .addSmallText("`4If you are having issues with account creation, please contact us.")
+    .endDialog("register_end", "", "Register")
+    .addQuickExit();
+    //.addLabelWithIcon("Coming soon!", "32", "small")
+    //.addSmallText("Unable to logon: Seems like you're on a guest account. Please register an account first from our website.")
+    
+  return peer.send(Variant.from("OnDialogRequest", dialog.str()));
+
   }
 
   public async run(base: BaseServer, netID: number, data: Buffer): Promise<void> {
@@ -52,12 +78,14 @@ export default class extends Listener<"raw"> {
         // Guest
         if (parsed?.requestedName && !parsed?.tankIDName && !parsed?.tankIDPass)
           return this.failGuest(peer);
-
-        // Using login & password
+        //this.guest(base, peer.data.netID);
+        
+    
+          // Using login & password
         if (parsed?.requestedName && parsed?.tankIDName && parsed?.tankIDPass) {
           const username = parsed.tankIDName as string;
           const password = parsed.tankIDPass as string;
-          base.database.getUser(username).then((user) => {
+          base.database.getUser(username).then(async (user) => {
             if (!user || password !== decrypt(user?.password!)) {
               peer.send(
                 Variant.from(
@@ -93,8 +121,8 @@ export default class extends Listener<"raw"> {
               Variant.from(
                 "OnSuperMainStartAcceptLogonHrdxs47254722215a",
                 base.items.hash,
-                "ubistatic-a.akamaihd.net",
-                "0098/748571133/cache/",
+                "ubistatic-a.akamaihd.net", //ubistatic-a.akamaihd.net
+                "0098/748571133/cache/", // 0098/748571133/cache/
                 "cc.cz.madkite.freedom org.aqua.gg idv.aqua.bulldog com.cih.gamecih2 com.cih.gamecih com.cih.game_cih cn.maocai.gamekiller com.gmd.speedtime org.dax.attack com.x0.strai.frep com.x0.strai.free org.cheatengine.cegui org.sbtools.gamehack com.skgames.traffikrider org.sbtoods.gamehaca com.skype.ralder org.cheatengine.cegui.xx.multi1458919170111 com.prohiro.macro me.autotouch.autotouch com.cygery.repetitouch.free com.cygery.repetitouch.pro com.proziro.zacro com.slash.gamebuster",
                 "proto=192|choosemusic=audio/mp3/about_theme.mp3|active_holiday=0|wing_week_day=0|ubi_week_day=0|server_tick=638729041|clash_active=0|drop_lavacheck_faster=1|isPayingUser=0|usingStoreNavigation=1|enableInventoryTab=1|bigBackpack=1|"
               ),
@@ -103,7 +131,7 @@ export default class extends Listener<"raw"> {
             );
 
             const defaultInventory = {
-              max: 32,
+              max: 50,
               items: [
                 {
                   id: 18, // Fist
@@ -112,9 +140,14 @@ export default class extends Listener<"raw"> {
                 {
                   id: 32, // Wrench
                   amount: 1
+                },
+                {
+                  id: 242, // World lock
+                  amount: 1
                 }
               ]
             };
+            
 
             const defaultClothing = {
               hair: 0,
@@ -129,11 +162,16 @@ export default class extends Listener<"raw"> {
               ances: 0
             };
 
+            //let role = await db.get(`Role_${peer.name}`) as string;
+            //let r = role
+            //let rs : string = "";
+            //if(!role) rs = Role.BASIC
             peer.data.tankIDName = user.name;
             peer.data.rotatedLeft = false;
             // peer.data.requestedName = parsed.requestedName as string;
             peer.data.country = parsed?.country as string;
             peer.data.id_user = user.id_user;
+            //peer.data.role = role ? role : rs;
             peer.data.role = user.role;
             // prettier-ignore
             peer.data.inventory = user.inventory?.length ? JSON.parse(user.inventory.toString()) : defaultInventory;
@@ -193,6 +231,32 @@ export default class extends Listener<"raw"> {
 
             const isAnces = (): boolean => {
               if (item?.type === ActionTypes.ANCES || item?.type === ActionTypes.LOCK) {
+                if(ActionTypes.LOCK && item.id === 242 || item.id === 1796){
+                  const checkPeerInventory = peer.data.inventory?.items.find((v) => v.id === 242);
+                  const checkPeerInventory1 = peer.data.inventory?.items.find((v) => v.id === 1796);
+
+                  if(checkPeerInventory?.amount! >= 100){
+                    const world = peer.hasWorld(peer.data.world);
+                    peer.removeItemInven(242, 100);
+                    peer.addItemInven(1796, 1)
+                    peer.inventory()
+                   //tileUpdate(base, peer, ActionTypes.LOCK, { x: 0, y: 0 }, world!);
+                   // peer.send(Variant.from("OnTalkBubble", peer.data.netID, "You compressed 100 World Locks into a `1Diamond Lock`0!"));
+
+                    peer.send(Variant.from("OnTalkBubble", peer.data.netID, "You compressed 100 World Locks into a `1Diamond Lock`0!"));
+                  }
+
+                  if(checkPeerInventory1?.amount! >= 1){
+                    const world = peer.hasWorld(peer.data.world);
+                    peer.removeItemInven(1796, 1);
+                    peer.addItemInven(242, 100)
+                    peer.inventory()
+                   //tileUpdate(base, peer, ActionTypes.LOCK, { x: 0, y: 0 }, world!);
+                   // peer.send(Variant.from("OnTalkBubble", peer.data.netID, "You compressed 100 World Locks into a `1Diamond Lock`0!"));
+
+                    peer.send(Variant.from("OnTalkBubble", peer.data.netID, "You suppressed 1 Diamond Lock into `9100 World Locks`0!"));
+                  }
+                }
                 if (peer.data.clothing!.ances === tank.data?.info! || peer.data.clothing!.face === tank.data?.info!) peer.data.clothing!.ances = 0;
                 else peer.data.clothing!.ances = tank.data?.info!;
                 return true;
@@ -249,6 +313,7 @@ export default class extends Listener<"raw"> {
                 const handItem = base.items.metadata.items.find(
                   (item) => item.id === tank.data?.info
                 );
+               
 
                 if (peer.data.clothing!.hand === tank.data.info!) peer.data.clothing!.hand = 0;
                 else peer.data.clothing!.hand = tank.data.info!;
@@ -258,8 +323,12 @@ export default class extends Listener<"raw"> {
               case ClothTypes.BACK: {
                 if (isAnces()) break;
 
+                peer.setTankValues()
+
                 if (peer.data.clothing!.back === tank.data.info!) peer.data.clothing!.back = 0;
                 else peer.data.clothing!.back = tank.data.info!;
+
+               
 
                 break;
               }
@@ -282,7 +351,7 @@ export default class extends Listener<"raw"> {
               }
               case ClothTypes.ANCES: {
                 if (isAnces()) break;
-
+                
                 if (peer.data.clothing!.ances === tank.data.info!) peer.data.clothing!.ances = 0;
                 else peer.data.clothing!.ances = tank.data.info!;
 
@@ -322,6 +391,17 @@ export default class extends Listener<"raw"> {
             } else if (tank.data.info === 32) {
               handleWrench(base, tank, peer, world);
             }
+
+            if(peer.data.clothing?.hand === 5480){
+              const handItem = base.items.metadata.items.find(
+                (item) => item.id === tank.data?.info
+              );
+              handItem?.isRayman === 3;
+             // handlePunch(, tank, peer, base, world.handlePunch({ x: peer.data.x + 3, y: peer.data.y + 3,  }));
+              //handlePunch(tank, peer, base, world);
+              //handlePunch(tank, peer, base, world);
+              //handlePlace(tank, peer, base, world.handlePunch());
+            }
             // Others
             else {
               handlePlace(tank, peer, base, world);
@@ -335,6 +415,33 @@ export default class extends Listener<"raw"> {
             const dropped = world?.data.dropped?.items.find((i) => i.uid === tank.data?.info);
 
             world?.collect(peer, dropped!.uid);
+
+            const timestamp = new Date().toLocaleString(); // Get the current date and time
+
+    const folderPath = '/Users/macbook/Desktop/GrowAsia/pickup-logs'; // Replace with the path to your target folder
+const fileName = `${world?.worldName}.txt`;
+const message = `[${timestamp}] ${peer.name} collected ${dropped?.amount} (ItemID: ${dropped?.id} | x: ${dropped!.x} y: ${dropped!.y})`; // Replace with your desired message
+
+fs.mkdir(folderPath, { recursive: true }, (err) => {
+  if (err) {
+    console.error('Error creating folder:', err);
+  } else {
+    const filePath = `${folderPath}/${fileName}`;
+
+    const writeStream = fs.createWriteStream(filePath, { flags: 'a' }); // Use 'a' flag for append mode
+
+    writeStream.write(message + '\n');
+    writeStream.end();
+
+    writeStream.on('finish', () => {
+      console.log(`New logs: ${filePath}`);
+    });
+
+    writeStream.on('error', (err) => {
+      console.error('Error writing message:', err);
+    });
+  }
+});
             break;
           }
 

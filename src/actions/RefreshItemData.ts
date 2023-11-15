@@ -17,6 +17,7 @@ export default class extends Action {
   public handle(base: BaseServer, peer: Peer,db: Database, action: ActionType<{ action: string }>): void {
     peer.send(
       Variant.from("OnConsoleMessage", "One moment. Updating item data..."),
+      //TankPacket.from({ type: TankTypes.PEER_ITEMS_DAT, data: () => base.items.hash }),
       TankPacket.from({ type: TankTypes.PEER_ITEMS_DAT, data: () => base.items.content })
     );
   }

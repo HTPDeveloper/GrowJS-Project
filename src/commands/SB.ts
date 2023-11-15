@@ -20,7 +20,7 @@ export default class extends Command {
       category: "Basic",
       usage: "/sb",
       example: ["/sb"],
-      permission: [Role.BASIC, Role.SUPPORTER, Role.DEVELOPER]
+      permission: [Role.BASIC, Role.MOD, Role.DEVELOPER]
     };
   }
 
@@ -32,11 +32,15 @@ export default class extends Command {
     if(peer.data.gems < 1000) return peer.send(Variant.from("OnConsoleMessage", "Could'nt broadcast, not enough gems."))
 
     if(!args[0]) return peer.send(Variant.from("OnConsoleMessage", "Could'nt broadcast, try again with interesting words."))
-    peer.send(Variant.from("OnConsoleMessage", `** \`pSuper-Broadcast \`0from ${peer.data.tankIDName} (in \`o${peer.data.world}\`0) **: \`#${broadcastMessage}`));
 
+    peer.everyPeer((p) => {
+      p.send(Variant.from("OnConsoleMessage", `** \`pSuper-Broadcast \`0from ${peer.data.tankIDName} (in \`o${peer.data.world}\`0) **: \`#${broadcastMessage}`));
+
+      
+    })
     peer.send(Variant.from("OnSetBux", parseInt(`${gemsLeft}`)));
-      peer.data.gems = parseInt(`${gemsLeft}`);
-      peer.saveToCache();
-      peer.saveToDatabase();
+        peer.data.gems = parseInt(`${gemsLeft}`);
+        peer.saveToCache();
+        peer.saveToDatabase();
   }
 }

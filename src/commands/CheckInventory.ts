@@ -16,21 +16,33 @@ export default class extends Command {
   constructor() {
     super();
     this.opt = {
-      name: "startcarnival",
-      description: "Open Carnival.",
+      name: "inv",
+      description: "Start a new world event.",
       cooldown: 0,
       ratelimit: 1,
-      category: "Basic",
-      usage: "/startcarnival",
-      example: ["/startcarnival"],
-      permission: [Role.BASIC, Role.ADMIN, Role.DEVELOPER]
+      category: "Developer",
+      usage: "/inventory",
+      example: ["/inventory"],
+      permission: [Role.MOD, Role.ADMIN, Role.DEVELOPER]
     };
   }
 
   public async execute(base: BaseServer, peer: Peer, text: string, args: string[]): Promise<void> { 
-   peer.everyPeer((p) => {
-    p.send(Variant.from("OnConsoleMessage", "`2Carnival has come to town`0, visit the world `9CARNIVAL`0, try your luck at winning one of the ringmaster's fabulous rings!"))
-   data.set(`Carnival`, true)
-   })
+    const pInv = peer.data.inventory?.items
+
+    
+     const dialog = new DialogBuilder()
+     .defaultColor()
+     .addLabelWithIcon(`${peer.name}'s inventory`, "32", "small")
+     .addSpacer("small")
+     .addCustomBreak()
+     const transformedArray = pInv!.map((element) => {
+      dialog.addButtonWithIcon(element.id!, element.id!, "", "staticBlueFrame", element.amount!)
+      });
+      dialog.addCustomBreak()
+      dialog.endDialog("endInv", "Cancel", "")
+
+      peer.send(Variant.from("OnDialogRequest", dialog.str()));
+
   }
 }

@@ -16,6 +16,8 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
   const isBg = base.items.metadata.items[tankData.info!].type === ActionTypes.BACKGROUND || base.items.metadata.items[tankData.info!].type === ActionTypes.SHEET_MUSIC;
   const placedItem = base.items.metadata.items.find((i) => i.id === tank.data?.info);
 
+  //const itemMeta = base.items.metadata.items[block.fg || block.bg!];
+
   if (!placedItem || !placedItem.id) return;
   if (tankData.info === 18 || tankData.info === 32) return;
 
@@ -28,6 +30,7 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
       Variant.from("OnConsoleMessage", `World already locked`)
     );
 
+
   if (world.data.owner) {
     if (world.data.owner.id !== peer.data.id_user) {
       if (peer.data.role !== Role.DEVELOPER) {
@@ -37,6 +40,9 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
       }
     }
   }
+
+  
+  
 
   if (placedItem.id === 242) {
     peer.everyPeer((pa) => {
@@ -65,7 +71,7 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
     placedItem.id === 3760 ||
     placedItem.id === 7372
   ) {
-    if (peer.data.role !== Role.DEVELOPER) {
+    if (peer.data.role !== Role.DEVELOPER && peer.data.role !== Role.ADMIN && peer.data.role !== Role.MOD) {
       return peer.send(
         Variant.from("OnTalkBubble", peer.data.netID, "Can't place that block."),
         Variant.from({ netID: peer.data.netID }, "OnPlayPositioned", "audio/punch_locked.wav")
@@ -98,7 +104,7 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
   return;
 }
 
-function removeItem(peer: Peer, tank: TankPacket, placed: boolean) {
+/*function removeItem(peer: Peer, tank: TankPacket, placed: boolean) {
   // prettier-ignore
   let invenItem = peer.data.inventory?.items.find((item) => item.id === tank.data?.info)!;
   if (placed) invenItem.amount = invenItem.amount! - 1;
@@ -108,5 +114,24 @@ function removeItem(peer: Peer, tank: TankPacket, placed: boolean) {
     // prettier-ignore
     peer.data.inventory!.items! = peer.data.inventory?.items.filter((i) => i.amount !== 0)!;
   }
+  peer.inventory();
+}*/
+function removeItem(peer: Peer, tank: TankPacket, placed: boolean) {
+  const tankInfo = tank.data?.info;
+  if (!tankInfo) return;
+
+  const inventory = peer.data.inventory;
+  if (!inventory) return;
+
+  const invenItemIndex = inventory.items.findIndex((item) => item.id === tankInfo);
+  if (invenItemIndex === -1) return;
+
+  const invenItem = inventory.items[invenItemIndex];
+  if (placed) invenItem.amount--;
+
+  if (invenItem.amount <= 0) {
+    inventory.items.splice(invenItemIndex, 1);
+  }
+
   peer.inventory();
 }
