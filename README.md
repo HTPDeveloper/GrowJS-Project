@@ -2,7 +2,7 @@
 Growtopia private server made with nodejs! 
 
 # Note
-- This is not the original or the updated src, it's just a sample.
+- Server was based from credits, huge thanks to JadlionHD [Credit below]()
 - Do not sell it(Dumb person will do it)
 
 # Change-logs
