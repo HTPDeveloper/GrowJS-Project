@@ -1,6 +1,13 @@
 # GrowJS-Test
 Growtopia private server made with nodejs! 
 
+# How To Setup
+```npm install```
+
+```npm run setup```
+
+```npm run dev``` - to run
+
 # Note
 - Server was based from credits, huge thanks to JadlionHD [Credit below](https://github.com/HTPGTDev/GrowJS-Project/blob/main/README.md#credits--how-to-setup)
 - Do not sell it(Dumb person will do it)
