@@ -11,6 +11,7 @@ Growtopia private server made with nodejs!
 # Note
 - Server was based from credits, huge thanks to JadlionHD [Credit below](https://github.com/HTPGTDev/GrowJS-Project/blob/main/README.md#credits--how-to-setup)
 - Do not sell it(Dumb person will do it)
+- Databases used: knex & quick.db(Alternative), you can change your own database if you want.
 
 # Change-logs
 - Added Surgery (Surg-e)
