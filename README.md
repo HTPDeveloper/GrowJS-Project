@@ -2,7 +2,7 @@
 Growtopia private server made with nodejs! 
 
 # How To Setup
-```npm install```
+```npm install``` (Any module error, do ```npm install <module>```
 
 ```npm run setup```
 
