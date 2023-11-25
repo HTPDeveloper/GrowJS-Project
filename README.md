@@ -1,4 +1,4 @@
-# GrowJS-Test
+# GrowJS-Project
 Growtopia private server made with nodejs! 
 
 # How To Setup
