@@ -2,7 +2,7 @@
 Growtopia private server made with nodejs! 
 
 # Note
-- This is not the original or the updated src, it's just a sample.
+- Join my Discord Server for updates/fixes notice - [GrowJS Project Discord](https://discord.com/invite/wgGhhs9mnH) 
 - Do not sell it(Dumb person will do it)
 
 # Features
