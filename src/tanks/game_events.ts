@@ -6,5 +6,4 @@ export const gameEvents = {
     Valentines: false,
     Easter: false,
     StPatricks: false
-    removeEvents: false
 };
