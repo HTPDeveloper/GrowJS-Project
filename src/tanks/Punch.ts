@@ -7,7 +7,7 @@ import { TankTypes } from "../utils/enums/TankTypes";
 import { ActionTypes } from "../utils/enums/Tiles";
 import { tileUpdate } from "./BlockPlacing";
 import { QuickDB } from "quick.db";
-import gameEvents from "../tanks/game_events.json";
+import { gameEvents } from "./";
 import { HandleTile } from "../structures/TileExtra";
 import { Block } from "../types/world";
 const data = new QuickDB
