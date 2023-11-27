@@ -24,11 +24,12 @@ export function handlePlace(tank: TankPacket, peer: Peer, base: BaseServer, worl
   if (block.fg === 242) return;
 
   const placedWL = world.data.blocks?.find((a) => a.fg === 242);
-  if (placedWL?.fg === block.fg)
+  if (placedWL?.fg && placedItem.id === 242) { 
     return peer.send(
-      Variant.from("OnTalkBubble", peer.data.netID, `World already locked`),
-      Variant.from("OnConsoleMessage", `World already locked`)
+      Variant.from("OnTalkBubble", peer.data.netID, `You can only place 1 \`9World Lock \`\`in a world!`),
+      Variant.from("OnConsoleMessage", `You can only place 1 \`9World Lock \`\`in a world!`)
     );
+  }
 
 
   if (world.data.owner) {
