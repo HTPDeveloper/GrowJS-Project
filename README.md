@@ -8,7 +8,7 @@ Growtopia private server made with nodejs!
 
 ```npm run dev``` - to run
 
-```npx --package typescript tsc --init``` - to install TypeScript
+```npm i tsc -g``` - to install TypeScript
 
 ```npm install knex```
 
