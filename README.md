@@ -8,8 +8,6 @@ Growtopia private server made with nodejs!
 
 ```npm run dev``` - to run
 
-```npm i tsc -g``` - to install TypeScript
-
 ```npm install knex```
 
 ```npm install quick.db```
