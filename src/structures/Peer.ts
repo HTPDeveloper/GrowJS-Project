@@ -6,7 +6,7 @@ import { TankTypes } from "../utils/enums/TankTypes";
 import { BaseServer } from "./BaseServer";
 import { World } from "./World";
 import { ItemCollisionType } from "../utils/enums/Tiles";
-import { getPunchId } from "../tanks/Test";
+import { getPunchId } from "../tanks/Effects";
 
 
 export class Peer extends OldPeer<PeerDataType> {
