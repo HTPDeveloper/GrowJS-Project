@@ -538,7 +538,7 @@ if(itemMeta.id === 758){
 
         
 
-        if (block.tree && Date.now() >= block.tree.fullyGrownAt && gameEvents.Harvestfest === "true") {
+        if (block.tree && Date.now() >= block.tree.fullyGrownAt && gameEvents.Harvestfest) {
         world.drop(peer, block.x! * 32 + Math.floor(Math.random() * 16),
         block.y! * 32 + Math.floor(Math.random() * 16), randomNum, 1)
         }
