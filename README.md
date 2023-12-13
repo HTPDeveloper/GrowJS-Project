@@ -2,7 +2,7 @@
 Growtopia private server made with nodejs! 
 
 # Views
-[![](https://visitcount.itsvg.in/api?id=Howtoplay&label=Profile%20Views&color=1&pretty=false)](https://visitcount.itsvg.in) 
+[![](https://visitcount.itsvg.in/api?id=GrowJS&label=Project%20Views&pretty=false)](https://visitcount.itsvg.in) 
 
 # How To Setup
 ```npm install``` (Any module error, do ```npm install <package>```) 
