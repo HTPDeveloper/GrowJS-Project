@@ -58,11 +58,6 @@ export default class extends Command {
       targetPeer.saveToDatabase().then(() => {
         targetPeer.send(Variant.from("OnTextOverlay", "`2Received`` " + role + "role!"))
       })
-
-     /* setTimeout(() => {
-         targetPeer.leave()
-         targetPeer.send(Varient.from("OnConsoleMessage", `${role} role was given to you. re-enter any world.`))
-      }, 1000)*/
     
   }
 }
