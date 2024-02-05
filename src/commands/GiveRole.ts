@@ -55,11 +55,14 @@ export default class extends Command {
        
       targetPeer.send(Variant.from("OnTextOverlay", "`4Please wait... saving data and setting role..."))
       targetPeer.saveToCache()
-      targetPeer.saveToDatabase()
+      targetPeer.saveToDatabase().then(() => {
+        targetPeer.send(Variant.from("OnTextOverlay", "`2Received`` " + role + "role!"))
+      })
 
-      setTimeout(() => {
-         targetPeer.disconnect()
-      }, 1000)
+     /* setTimeout(() => {
+         targetPeer.leave()
+         targetPeer.send(Varient.from("OnConsoleMessage", `${role} role was given to you. re-enter any world.`))
+      }, 1000)*/
     
   }
 }
