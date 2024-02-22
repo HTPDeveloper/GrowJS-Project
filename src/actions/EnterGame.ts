@@ -47,7 +47,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     peer.send(
       Variant.from("OnRequestWorldSelectMenu", "add_filter|\nadd_heading|Top Worlds|\nadd_floater|wotd_world|START|0|0.5|2147418367|"),
       
-      Variant.from("OnConsoleMessage", `Welcome! ${peer.name} Where would you like to go? (${data} online)`),
+      Variant.from("OnConsoleMessage", `Welcome! ${peer.name} Where would you like to go? ( online)`),
       Variant.from({ delay: 100 }, "OnDialogRequest", tes)
     );
     if(carnival){
