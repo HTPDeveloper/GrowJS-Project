@@ -22,7 +22,7 @@ export default class extends Action {
     action: ActionType<{ action: string; name: string }>
   ): Promise<void> {
     const worldName: string = action.name || "";
-    const worldEntering = this.base.cache.worlds.getWorld(worldName)
+    const worldEntering = base.cache.worlds.getWorld(worldName)
      
     if (worldName.length <= 0) {
       return peer.send(
