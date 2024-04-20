@@ -36,7 +36,7 @@ export default class extends Action {
         Variant.from("OnConsoleMessage", "That world name is too `9special`` to be entered.")
       );
     }
-     if(worldEntering.data.playerCount! >= 10){
+     if(worldEntering.data?.playerCount! >= 10){
       peer.send(Variant.from("OnFailedToEnterWorld", 1), Variant.from("OnConsoleMessage", `Oops, \`5${worldName.toLocaleUpperCase()} already has \`410\`\` people in it. Try again later.`));
       return;
     }
