@@ -1,6 +1,10 @@
 # GrowJS-Project
 Growtopia private server made with nodejs! 
 
+> [!NOTE]
+> This project has discontinued/Outdated, wait for future notice in our Discord!
+>
+
 # Views
 [![](https://visitcount.itsvg.in/api?id=GrowJS&label=Project%20Views&pretty=false)](https://visitcount.itsvg.in) 
 
