@@ -9,7 +9,7 @@ Growtopia private server made with nodejs!
 [![](https://visitcount.itsvg.in/api?id=GrowJS&label=Project%20Views&pretty=false)](https://visitcount.itsvg.in) 
 
 # How To Setup
-\npm install\ (Any module error, do \npm install <package>\) 
+`npm install` (Any module error, do `npm install <package>`) 
 
 ```npm run setup```
 
