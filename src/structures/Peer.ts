@@ -34,12 +34,10 @@ export class Peer extends OldPeer<PeerDataType> {
       state: 0
     }).parse();
   
-    tank.writeUint8(18 || 0x0, 5);
+    tank.writeUint8(getPunchId || 0x0, 5);
     tank.writeUint8(0x80, 6); // extra punch
     tank.writeUint8(0x80, 7); // extra place
     tank.writeFloatLE(125.0, 20); // water walk speed
-  
-    // Use the updated tank object here
     
     this.send(tank);
     
