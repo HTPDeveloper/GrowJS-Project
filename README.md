@@ -11,13 +11,22 @@ Growtopia private server made with nodejs!
 # How To Setup
 `npm install` (Any module error, do `npm install <package>`) 
 
-```npm run setup```
+```
+$ npm run setup
+```
 
-```npm run dev``` - to run
+```
+$ npm run dev
+```
+__If needed:__
 
-```npm install knex```
+```
+$ npm install knex
+```
 
-```npm install quick.db```
+```
+$npm install quick.db
+```
 
 # Note
 - Server was based from credits, huge thanks to JadlionHD [Credit below](https://github.com/HTPGTDev/GrowJS-Project/blob/main/README.md#credits--how-to-setup)
