@@ -1,8 +1,8 @@
 # GrowJS-Project
 Growtopia private server made with nodejs! 
 
-> [!NOTE]
-> This project has discontinued/outdated, wait for future notice in our Discord!
+> [!WARNING]
+> This project has been discontinued and is outdated. Please wait for further notice on our Discord.
 >
 
 # Views
