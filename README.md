@@ -73,7 +73,8 @@ $npm install quick.db
 how_to_play#0
 [Discord Server](https://discord.gg/ZqxeqhGZG8) 
 
-# Want to contribute? Sure! 
+# Contributors
+Feel free to do so.
 
 # Credits & How to setup
 [Credits](https://github.com/JadlionHD/GrowServer/tree/main#credits) | 
