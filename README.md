@@ -28,7 +28,7 @@ $ npm install knex
 ```
 
 ```
-$npm install quick.db
+$ npm install quick.db
 ```
 
 # Note
