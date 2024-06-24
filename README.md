@@ -2,7 +2,7 @@
 Growtopia private server made with nodejs! 
 
 > [!WARNING]
-> This project has been discontinued and is outdated. Please wait for further notice on our Discord.
+> This project has been discontinued and is outdated. Please wait for further notice in our Discord.
 >
 
 # Views
